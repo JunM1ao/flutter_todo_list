@@ -43,20 +43,28 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
         child: const Icon(Icons.add, color: Colors.white),
 
         onPressed: () {
           showDialog(context: context, builder: (BuildContext context) {
             return AlertDialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)
+                  borderRadius: BorderRadius.circular(8)
               ),
               title: const Text('Add New Todo'),
               content: TextField(
                 onChanged: (String value) {
                   _input = value;
                 },
+                decoration: const InputDecoration(
+                    hintText: 'Anything you want',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    )
+                ),
               ),
 
               actions: <Widget>[
@@ -73,14 +81,26 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             );
-
           });
         },
       ),
-      body: ListView.builder(
+      body: _todos.isEmpty ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const <Widget>[
+            Text(
+              'Empty so far! All caught up?',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        ),
+      ) : ListView.builder(
           itemCount: _todos.length,
           itemBuilder: (BuildContext context, int index) {
-
             return Dismissible(
               background: Container(color: Colors.redAccent),
               key: Key(_todos[index]),
@@ -98,15 +118,11 @@ class _HomePageState extends State<HomePage> {
                     horizontal: 14.0,
                     vertical: 6.0
                 ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)
-                ),
                 child: ListTile(
                   title: Text(_todos[index]),
                 ),
               ),
             );
-
           }),
     );
   }
